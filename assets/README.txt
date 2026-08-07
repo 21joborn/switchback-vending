@@ -1,11 +1,10 @@
-Put your image files in this folder:
+Image files in this folder:
 
-1. logo.jpg
-   - Your Switchback Vending logo (the mountain + vending machine logo)
+1. logo.png (required)
+   - Your Switchback Vending logo
    - Used in the header and hero
 
-2. vending-machine.jpg
+2. vending-machine.jpg (optional)
    - A photo of a vending machine or breakroom
    - Used as the hero background
-
-File names must match exactly (or update the paths in index.html and css/styles.css).
+   - Site still looks fine without it
