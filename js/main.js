@@ -4,7 +4,6 @@
     const form = document.getElementById("vendingForm");
     const formStatus = document.getElementById("formStatus");
 
-    // Mobile navigation
     if (navToggle && siteNav) {
         navToggle.addEventListener("click", function () {
             const open = siteNav.classList.toggle("is-open");
@@ -31,10 +30,23 @@
     form.addEventListener("submit", async function (event) {
         event.preventDefault();
 
+        const honeypot = document.getElementById("company_website");
+        if (honeypot && honeypot.value.trim() !== "") {
+            showStatus("Thanks, your inquiry was received.", "success");
+            form.reset();
+            return;
+        }
+
+        const verify = (document.getElementById("verify") || {}).value;
+        if (String(verify).trim() !== "5") {
+            showStatus("Please answer the quick check correctly (2 + 3).", "error");
+            return;
+        }
+
         const submitBtn = form.querySelector('button[type="submit"]');
         const payload = {
             access_key: WEB3FORMS_ACCESS_KEY,
-            subject: "New vending inquiry — Switchback Vending",
+            subject: "New vending inquiry from Switchback Vending website",
             from_name: "Switchback Vending Website",
             firstName: document.getElementById("firstName").value.trim(),
             lastName: document.getElementById("lastName").value.trim(),
@@ -51,7 +63,6 @@
         }
 
         if (!WEB3FORMS_ACCESS_KEY || WEB3FORMS_ACCESS_KEY === "YOUR_WEB3FORMS_ACCESS_KEY") {
-            // Fallback until the access key is added: open a prefilled email
             const body = [
                 "Name: " + payload.firstName + " " + payload.lastName,
                 "Business: " + payload.businessName,
@@ -95,7 +106,7 @@
             showStatus("Something went wrong. Please call (801) 643-8595 or email switchbackvending@gmail.com.", "error");
         } finally {
             submitBtn.disabled = false;
-            submitBtn.textContent = "Send inquiry";
+            submitBtn.textContent = "Send Inquiry";
         }
     });
 
