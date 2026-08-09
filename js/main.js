@@ -20,6 +20,16 @@
         });
     }
 
+    document.querySelectorAll("[data-station]").forEach(function (link) {
+        link.addEventListener("click", function () {
+            const stationSelect = document.getElementById("fuelingStation");
+            const value = link.getAttribute("data-station");
+            if (stationSelect && value) {
+                stationSelect.value = value;
+            }
+        });
+    });
+
     // Contact form → Web3Forms (free email delivery)
     // 1. Go to https://web3forms.com and create an access key with switchbackvending@gmail.com
     // 2. Paste the key below
@@ -44,9 +54,10 @@
         }
 
         const submitBtn = form.querySelector('button[type="submit"]');
+        const fuelingStationEl = document.getElementById("fuelingStation");
         const payload = {
             access_key: WEB3FORMS_ACCESS_KEY,
-            subject: "New vending inquiry from Switchback Vending website",
+            subject: "New Fueling Station inquiry from Switchback Vending website",
             from_name: "Switchback Vending Website",
             firstName: document.getElementById("firstName").value.trim(),
             lastName: document.getElementById("lastName").value.trim(),
@@ -54,10 +65,11 @@
             email: document.getElementById("email").value.trim(),
             phone: document.getElementById("phone").value.trim(),
             address: document.getElementById("address").value.trim(),
+            fuelingStation: fuelingStationEl ? fuelingStationEl.value.trim() : "",
             message: document.getElementById("message").value.trim()
         };
 
-        if (!payload.firstName || !payload.lastName || !payload.businessName || !payload.email || !payload.message) {
+        if (!payload.firstName || !payload.lastName || !payload.businessName || !payload.email || !payload.fuelingStation || !payload.message) {
             showStatus("Please fill in all required fields.", "error");
             return;
         }
@@ -69,13 +81,14 @@
                 "Email: " + payload.email,
                 "Phone: " + (payload.phone || "Not provided"),
                 "Address: " + (payload.address || "Not provided"),
+                "Fueling Station: " + payload.fuelingStation,
                 "",
                 payload.message
             ].join("\n");
 
             window.location.href =
                 "mailto:switchbackvending@gmail.com?subject=" +
-                encodeURIComponent("Vending inquiry from " + payload.businessName) +
+                encodeURIComponent("Fueling Station inquiry from " + payload.businessName) +
                 "&body=" +
                 encodeURIComponent(body);
 
