@@ -27,6 +27,10 @@
             if (stationSelect && value) {
                 stationSelect.value = value;
             }
+            window.setTimeout(function () {
+                const firstName = document.getElementById("firstName");
+                if (firstName) firstName.focus();
+            }, 0);
         });
     });
 

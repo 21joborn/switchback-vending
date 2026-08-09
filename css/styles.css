@@ -478,11 +478,19 @@ a {
     display: flex;
     flex-direction: column;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
+    text-decoration: none;
+    color: inherit;
+    cursor: pointer;
 }
 
 .station-card:hover {
     transform: translateY(-4px);
     box-shadow: var(--shadow-lg);
+}
+
+.station-card:focus-visible {
+    outline: 3px solid var(--brand, #d41e2a);
+    outline-offset: 3px;
 }
 
 .station-card-top {
