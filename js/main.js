@@ -48,12 +48,6 @@
             return;
         }
 
-        const verify = (document.getElementById("verify") || {}).value;
-        if (String(verify).trim() !== "5") {
-            showStatus("Please answer the quick check correctly (2 + 3).", "error");
-            return;
-        }
-
         const submitBtn = form.querySelector('button[type="submit"]');
         const fuelingStationEl = document.getElementById("fuelingStation");
         const payload = {
