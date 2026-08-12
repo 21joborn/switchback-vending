@@ -34,10 +34,7 @@
         });
     });
 
-    // Contact form → Web3Forms (free email delivery)
-    // 1. Go to https://web3forms.com and create an access key with switchbackvending@gmail.com
-    // 2. Paste the key below
-    const WEB3FORMS_ACCESS_KEY = "YOUR_WEB3FORMS_ACCESS_KEY";
+    const INQUIRY_EMAIL = "switchbackvending@gmail.com";
 
     if (!form) return;
 
@@ -60,9 +57,6 @@
         const submitBtn = form.querySelector('button[type="submit"]');
         const fuelingStationEl = document.getElementById("fuelingStation");
         const payload = {
-            access_key: WEB3FORMS_ACCESS_KEY,
-            subject: "New Fueling Station inquiry from Switchback Vending website",
-            from_name: "Switchback Vending Website",
             firstName: document.getElementById("firstName").value.trim(),
             lastName: document.getElementById("lastName").value.trim(),
             businessName: document.getElementById("businessName").value.trim(),
@@ -78,41 +72,42 @@
             return;
         }
 
-        if (!WEB3FORMS_ACCESS_KEY || WEB3FORMS_ACCESS_KEY === "YOUR_WEB3FORMS_ACCESS_KEY") {
-            const body = [
-                "Name: " + payload.firstName + " " + payload.lastName,
-                "Business: " + payload.businessName,
-                "Email: " + payload.email,
-                "Phone: " + (payload.phone || "Not provided"),
-                "Address: " + (payload.address || "Not provided"),
-                "Fueling Station: " + payload.fuelingStation,
-                "",
-                payload.message
-            ].join("\n");
-
-            window.location.href =
-                "mailto:switchbackvending@gmail.com?subject=" +
-                encodeURIComponent("Fueling Station inquiry from " + payload.businessName) +
-                "&body=" +
-                encodeURIComponent(body);
-
-            showStatus("Opening your email app to send the inquiry…", "success");
-            return;
-        }
-
         submitBtn.disabled = true;
         submitBtn.textContent = "Sending…";
 
+        const emailBody = [
+            "Name: " + payload.firstName + " " + payload.lastName,
+            "Business: " + payload.businessName,
+            "Email: " + payload.email,
+            "Phone: " + (payload.phone || "Not provided"),
+            "Address: " + (payload.address || "Not provided"),
+            "Station: " + payload.fuelingStation,
+            "",
+            payload.message
+        ].join("\n");
+
         try {
-            const response = await fetch("https://api.web3forms.com/submit", {
+            const response = await fetch("https://formsubmit.co/ajax/" + INQUIRY_EMAIL, {
                 method: "POST",
                 headers: { "Content-Type": "application/json", Accept: "application/json" },
-                body: JSON.stringify(payload)
+                body: JSON.stringify({
+                    name: payload.firstName + " " + payload.lastName,
+                    email: payload.email,
+                    phone: payload.phone || "Not provided",
+                    business: payload.businessName,
+                    address: payload.address || "Not provided",
+                    station: payload.fuelingStation,
+                    message: payload.message,
+                    _subject: "New station inquiry from " + payload.businessName,
+                    _template: "table",
+                    _captcha: "false",
+                    _replyto: payload.email
+                })
             });
 
             const result = await response.json();
 
-            if (!response.ok || result.success === false) {
+            if (!response.ok || result.success === "false" || result.success === false) {
                 throw new Error(result.message || "Send failed");
             }
 
@@ -120,7 +115,11 @@
             showStatus("Thank you! Your inquiry was sent. We will get back to you soon.", "success");
         } catch (error) {
             console.error(error);
-            showStatus("Something went wrong. Please call (801) 643-8595 or email switchbackvending@gmail.com.", "error");
+            window.location.href =
+                "mailto:" + INQUIRY_EMAIL +
+                "?subject=" + encodeURIComponent("Station inquiry from " + payload.businessName) +
+                "&body=" + encodeURIComponent(emailBody);
+            showStatus("We could not send automatically, so your email app was opened instead. You can also call (801) 643-8595.", "error");
         } finally {
             submitBtn.disabled = false;
             submitBtn.textContent = "Send Inquiry";

@@ -9,11 +9,9 @@ Customer-facing site for Switchback Vending: free machine placement, custom inve
 
 ## Contact form
 
-The form uses [Web3Forms](https://web3forms.com) (free). Until you add a key, submit opens a prefilled email to `switchbackvending@gmail.com`.
+The form emails submissions to `switchbackvending@gmail.com` through [FormSubmit](https://formsubmit.co).
 
-1. Visit https://web3forms.com
-2. Create an access key for `switchbackvending@gmail.com`
-3. Paste it into `js/main.js` where it says `YOUR_WEB3FORMS_ACCESS_KEY`
+The first time someone submits the form, FormSubmit sends an activation email to that inbox. Open it and click the confirmation link (check spam if you do not see it). After that, new inquiries arrive automatically.
 
 ## GitHub + GitHub Pages setup
 
