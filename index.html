@@ -225,7 +225,11 @@
                     </div>
                 </div>
 
-                <form id="vendingForm" class="contact-form" novalidate>
+                <form id="vendingForm" class="contact-form" action="https://formsubmit.co/switchbackvending@gmail.com" method="POST" novalidate>
+                    <input type="hidden" name="_subject" id="formSubject" value="New station inquiry from Switchback Vending website">
+                    <input type="hidden" name="_template" value="table">
+                    <input type="hidden" name="_captcha" value="false">
+                    <input type="hidden" name="_next" value="https://switchbackvending.com/?sent=1#contact">
                     <div class="form-row">
                         <div class="form-group">
                             <label for="firstName">First name</label>
@@ -270,7 +274,7 @@
                     </div>
                     <div class="form-group honeypot" aria-hidden="true">
                         <label for="company_website">Company website</label>
-                        <input type="text" id="company_website" name="company_website" tabindex="-1" autocomplete="off">
+                        <input type="text" id="company_website" name="_honey" tabindex="-1" autocomplete="off">
                     </div>
                     <button type="submit" class="btn btn-pill btn-primary btn-submit">Send Inquiry</button>
                     <p id="formStatus" class="form-status" role="status" hidden></p>

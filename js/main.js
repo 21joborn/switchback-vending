@@ -34,90 +34,42 @@
         });
     });
 
-    const INQUIRY_EMAIL = "switchbackvending@gmail.com";
-
     if (!form) return;
 
-    form.addEventListener("submit", async function (event) {
-        event.preventDefault();
+    if (new URLSearchParams(window.location.search).get("sent") === "1") {
+        showStatus("Thank you! Your inquiry was sent. We will get back to you soon.", "success");
+    }
 
+    form.addEventListener("submit", function (event) {
         const honeypot = document.getElementById("company_website");
         if (honeypot && honeypot.value.trim() !== "") {
+            event.preventDefault();
             showStatus("Thanks, your inquiry was received.", "success");
             form.reset();
             return;
         }
 
-        const submitBtn = form.querySelector('button[type="submit"]');
-        const fuelingStationEl = document.getElementById("fuelingStation");
-        const payload = {
-            firstName: document.getElementById("firstName").value.trim(),
-            lastName: document.getElementById("lastName").value.trim(),
-            businessName: document.getElementById("businessName").value.trim(),
-            email: document.getElementById("email").value.trim(),
-            phone: document.getElementById("phone").value.trim(),
-            address: document.getElementById("address").value.trim(),
-            fuelingStation: fuelingStationEl ? fuelingStationEl.value.trim() : "",
-            message: document.getElementById("message").value.trim()
-        };
+        const firstName = document.getElementById("firstName").value.trim();
+        const lastName = document.getElementById("lastName").value.trim();
+        const businessName = document.getElementById("businessName").value.trim();
+        const email = document.getElementById("email").value.trim();
+        const fuelingStation = document.getElementById("fuelingStation").value.trim();
+        const message = document.getElementById("message").value.trim();
 
-        if (!payload.firstName || !payload.lastName || !payload.businessName || !payload.email || !payload.fuelingStation || !payload.message) {
+        if (!firstName || !lastName || !businessName || !email || !fuelingStation || !message) {
+            event.preventDefault();
             showStatus("Please fill in all required fields.", "error");
             return;
         }
 
+        const subject = document.getElementById("formSubject");
+        if (subject) {
+            subject.value = "New station inquiry from " + businessName;
+        }
+
+        const submitBtn = form.querySelector('button[type="submit"]');
         submitBtn.disabled = true;
         submitBtn.textContent = "Sending…";
-
-        const emailBody = [
-            "Name: " + payload.firstName + " " + payload.lastName,
-            "Business: " + payload.businessName,
-            "Email: " + payload.email,
-            "Phone: " + (payload.phone || "Not provided"),
-            "Address: " + (payload.address || "Not provided"),
-            "Station: " + payload.fuelingStation,
-            "",
-            payload.message
-        ].join("\n");
-
-        try {
-            const response = await fetch("https://formsubmit.co/ajax/" + INQUIRY_EMAIL, {
-                method: "POST",
-                headers: { "Content-Type": "application/json", Accept: "application/json" },
-                body: JSON.stringify({
-                    name: payload.firstName + " " + payload.lastName,
-                    email: payload.email,
-                    phone: payload.phone || "Not provided",
-                    business: payload.businessName,
-                    address: payload.address || "Not provided",
-                    station: payload.fuelingStation,
-                    message: payload.message,
-                    _subject: "New station inquiry from " + payload.businessName,
-                    _template: "table",
-                    _captcha: "false",
-                    _replyto: payload.email
-                })
-            });
-
-            const result = await response.json();
-
-            if (!response.ok || result.success === "false" || result.success === false) {
-                throw new Error(result.message || "Send failed");
-            }
-
-            form.reset();
-            showStatus("Thank you! Your inquiry was sent. We will get back to you soon.", "success");
-        } catch (error) {
-            console.error(error);
-            window.location.href =
-                "mailto:" + INQUIRY_EMAIL +
-                "?subject=" + encodeURIComponent("Station inquiry from " + payload.businessName) +
-                "&body=" + encodeURIComponent(emailBody);
-            showStatus("We could not send automatically, so your email app was opened instead. You can also call (801) 643-8595.", "error");
-        } finally {
-            submitBtn.disabled = false;
-            submitBtn.textContent = "Send Inquiry";
-        }
     });
 
     function showStatus(message, type) {

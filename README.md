@@ -11,7 +11,7 @@ Customer-facing site for Switchback Vending: free machine placement, custom inve
 
 The form emails submissions to `switchbackvending@gmail.com` through [FormSubmit](https://formsubmit.co).
 
-The first time someone submits the form, FormSubmit sends an activation email to that inbox. Open it and click the confirmation link (check spam if you do not see it). After that, new inquiries arrive automatically.
+Check that inbox for an email with an **Activate Form** link and click it (look in spam too). After that, inquiries arrive automatically. No email app should open on the visitor’s computer.
 
 ## GitHub + GitHub Pages setup
 
