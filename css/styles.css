@@ -98,10 +98,10 @@ a {
 
 .logo img {
     display: block;
-    height: 52px;
+    height: 56px;
     width: auto;
-    max-height: 52px;
-    max-width: min(260px, 58vw);
+    max-height: 56px;
+    max-width: min(280px, 62vw);
     object-fit: contain;
     object-position: left center;
 }
@@ -1039,9 +1039,9 @@ a {
     }
 
     .logo img {
-        height: 42px;
-        max-height: 42px;
-        max-width: min(200px, 52vw);
+        height: 44px;
+        max-height: 44px;
+        max-width: min(210px, 55vw);
     }
 
     .nav-toggle {
